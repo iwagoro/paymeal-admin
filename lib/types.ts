@@ -32,7 +32,7 @@ export type TicketFormValues = {
     img_url: string;
     price: number;
     stock: number;
-    contents: { value: string }[];
+    contents: { value: string }[] | [];
 };
 
 //? cart

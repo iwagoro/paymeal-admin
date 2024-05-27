@@ -6,6 +6,7 @@ const url = process.env.NEXT_PUBLIC_API_URL;
 export const getAllTickets = async () => {
     try {
         const res = await axios.get(`${url}/tickets`);
+        console.log(res);
         return res.data.content.tickets || [];
     } catch {
         toast.error("Failed to get tickets", { style: { color: "#FFFFFF", background: "#FF0000" } });

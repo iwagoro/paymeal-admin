@@ -21,10 +21,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const token = await getIdToken(user);
-                await getUserInfo(token).then((data) => {
-                    setUser({ email: data.email, id: data.id, token: token, img_url: null });
-                });
+                try {
+                    const token = await getIdToken(user);
+                    await getUserInfo(token).then((data) => {
+                        setUser({ email: data.email, id: data.id, token: token, img_url: null });
+                    });
+                } catch {
+                    router.push("/auth");
+                }
             } else {
                 setUser({} as userType);
                 router.push("/auth");

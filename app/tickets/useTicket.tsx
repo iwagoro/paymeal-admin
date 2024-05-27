@@ -18,6 +18,7 @@ export default function useTicket() {
                 const [ticketsRes, tagsRes, ticketTagsRes] = await Promise.all([getAllTickets(), getTags(), getRelations()]);
                 setTickets(ticketsRes);
                 setTags(tagsRes);
+                console.log(tagsRes);
                 setTags([{ id: 0, name: "all" }, ...tagsRes]);
                 setTicketTags(ticketTagsRes);
                 setSelectedTickets(ticketsRes);

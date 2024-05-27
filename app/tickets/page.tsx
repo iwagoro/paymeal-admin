@@ -7,6 +7,7 @@ import useTicket from "./useTicket";
 import TicketForm from "./ticket-form";
 import { TicketType } from "@/lib/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import AddTicket from "./add-ticket";
 
 export default function Home() {
     const { tags, selectedTickets, selectedTag, setSelectedTag } = useTicket();
@@ -16,16 +17,8 @@ export default function Home() {
         <div className="w-full flex flex-col justify-start items-start gap-5 ">
             <Card className="w-full">
                 <CardHeader>
-                    <Accordion type="single" collapsible>
-                        <AccordionItem value="item-1">
-                            <AccordionTrigger>
-                                <CardTitle>Add Ticket</CardTitle>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <TicketForm />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
+                    <CardTitle>Add Ticket</CardTitle>
+                    <AddTicket />
                 </CardHeader>
             </Card>
 

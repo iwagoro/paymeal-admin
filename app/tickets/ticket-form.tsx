@@ -33,6 +33,7 @@ export default function TicketForm({ ticket }: { ticket?: TicketType }) {
             const tagsName = tags.filter((tag) => tagsWithTicket.includes(tag.id)).map((tag) => tag.name);
             const contents = Object.values(data.contents).map((content) => (content.value === "" ? null : content.value));
             const newData = { ...data, contents } as TicketType;
+            console.log(data);
             await updateTicketDetails(ticket.id, newData, tagsName);
         }
     };
@@ -45,6 +46,8 @@ export default function TicketForm({ ticket }: { ticket?: TicketType }) {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl grid grid-cols-3 gap-8">
             <div className="w-full flex flex-col gap-3">
+                <Label>Image URL</Label>
+                <Input type="text" {...register("img_url")} />
                 <Label>Name</Label>
                 <Input type="text" {...register("name")} />
                 <Label>Description</Label>
