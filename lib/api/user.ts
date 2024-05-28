@@ -12,9 +12,9 @@ export const getUserInfo = async (token: string) => {
             },
         };
         const res = await axios.get(`${url}/admin`, config);
-        return res.data.content.user;
-    } catch {
-        toast.error("Failed to get user info", { style: { color: "#FFFFFF", background: "#FF0000" } });
+        return res.data.user;
+    } catch (error) {
+        throw error;
     }
 };
 
@@ -27,7 +27,8 @@ export const addUser = async (token: string, secret: string) => {
             },
         };
         await axios.post(`${url}/admin`, { password: secret }, config);
-    } catch {
-        toast.error("Failed to add user", { style: { color: "#FFFFFF", background: "#FF0000" } });
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 };

@@ -2,21 +2,23 @@ import { toast } from "sonner";
 
 // サインアップ時のエラーハンドリング
 export const handleSignUpError = (error: any) => {
+    console.log(error.code);
+    console.log(error.message);
     switch (error.code) {
         case "auth/email-already-in-use":
-            toast("This email is already in use");
+            return "This email is already in use";
             break;
         case "auth/invalid-email":
-            toast("Invalid email address");
+            return "Invalid email address";
             break;
         case "auth/operation-not-allowed":
-            toast("Operation not allowed");
+            return "Operation not allowed";
             break;
         case "auth/weak-password":
-            toast("Weak password");
+            return "Weak password";
             break;
         default:
-            toast("Unknown error occurred");
+            return "Unknown error occurred";
             break;
     }
 };
@@ -25,19 +27,19 @@ export const handleSignUpError = (error: any) => {
 export const handleLoginError = (error: any) => {
     switch (error.code) {
         case "auth/invalid-email":
-            toast("Invalid email address");
+            return "Invalid email address";
             break;
         case "auth/user-disabled":
-            toast("User disabled");
+            return "User disabled";
             break;
         case "auth/user-not-found":
-            toast("User not found");
+            return "User not found";
             break;
         case "auth/wrong-password":
-            toast("Wrong password");
+            return "Wrong password";
             break;
         default:
-            toast("Unknown error occurred");
+            return "Unknown error occurred";
             break;
     }
 };

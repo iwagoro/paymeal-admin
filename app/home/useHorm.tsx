@@ -23,7 +23,7 @@ export function useHorm() {
                     setDailyOrders(dailyOrders);
                 }
             );
-    }, [user.token]);
+    }, [user]);
 
     return {
         user,

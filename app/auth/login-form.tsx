@@ -8,34 +8,48 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mute } from "@/components/ui/typography";
-import { handleSignUpError } from "./handler";
-import { useContext } from "react";
+import { handleLoginError } from "./handler";
+import { useContext, useState } from "react";
 import { AppContext } from "@/provider/app-provider";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { TriangleAlert } from "lucide-react";
 
 export type FormType = { email: string; password: string };
 export default function LoginForm({ variation }: { variation?: "outline" | "default" }) {
     const { setUser } = useContext(AppContext);
+    const [error, setError] = useState<string>("");
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<FormType>();
 
-    const onSubmit = (data: FormType) => {
-        signInWithEmailAndPassword(auth, data.email, data.password)
-            .then(async (userCredential) => {
-                const token = await getIdToken(userCredential.user);
+    const onSubmit = async (data: FormType) => {
+        try {
+            setError("");
+            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+            const token = await userCredential.user.getIdToken();
+            try {
                 const userInfo = await getUserInfo(token);
-                setUser({ email: userInfo.email, id: userInfo.id, token: token, img_url: null });
+                setUser(userInfo);
                 window.location.href = "/home";
-            })
-            .catch((error) => {
-                handleSignUpError(error);
-            });
+            } catch {
+                setError("Failed to get user info");
+            }
+        } catch (error) {
+            setError(handleLoginError(error));
+        }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-10">
+            {error != "" && (
+                <Alert variant="destructive">
+                    <TriangleAlert size={16} />
+                    <AlertTitle>Authentication Error</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                </Alert>
+            )}
             <div>
                 <Label htmlFor="email">Email</Label>
                 <Input

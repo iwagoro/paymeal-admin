@@ -18,7 +18,6 @@ export default function useTicket() {
                 const [ticketsRes, tagsRes, ticketTagsRes] = await Promise.all([getAllTickets(), getTags(), getRelations()]);
                 setTickets(ticketsRes);
                 setTags(tagsRes);
-                console.log(tagsRes);
                 setTags([{ id: 0, name: "all" }, ...tagsRes]);
                 setTicketTags(ticketTagsRes);
                 setSelectedTickets(ticketsRes);
@@ -38,24 +37,10 @@ export default function useTicket() {
         }
     }, [selectedTag]);
 
-    const addNewTicket = async (data: TicketFormValues) => {
-        try {
-            await addTicket(user.token, data);
-            toast.success("Ticket added successfully");
-        } catch (error) {
-            toast.error("Failed to add ticket");
-        }
-    };
-
     const updateTicketDetails = async (id: number, ticket: TicketType, tags: string[]) => {
-        try {
-            await updateTicket(user.token, id, ticket);
-            await setTagsToTicket(user.token, id, tags);
-            toast.success("Ticket updated successfully");
-        } catch (error) {
-            toast.error("Failed to update ticket");
-        }
+        await updateTicket(user.token, id, ticket);
+        await setTagsToTicket(user.token, id, tags);
     };
 
-    return { tickets, tags, ticketTags, selectedTickets, selectedTag, setSelectedTickets, setSelectedTag, addNewTicket, updateTicketDetails };
+    return { tickets, setTickets, tags, ticketTags, selectedTickets, selectedTag, setSelectedTickets, setSelectedTag, updateTicketDetails };
 }

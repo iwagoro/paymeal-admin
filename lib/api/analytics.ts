@@ -12,9 +12,9 @@ export const getMonthlyStatics = async (token: string) => {
             },
         };
         const res = await axios.get(`${url}/analytics/sales/monthly`, config);
-        return res.data.content.sales;
+        return res.data.sales;
     } catch {
-        toast.error("Failed to get monthly sales", { style: { color: "#FFFFFF", background: "#FF0000" } });
+        return [];
     }
 };
 
@@ -27,9 +27,9 @@ export const getDailySales = async (token: string) => {
             },
         };
         const res = await axios.get(`${url}/sales/daily`, config);
-        return res.data.content.total;
+        return res.data.total;
     } catch {
-        toast.error("Failed to get daily sales", { style: { color: "#FFFFFF", background: "#FF0000" } });
+        return 0;
     }
 };
 
@@ -42,9 +42,9 @@ export const getWeelySales = async (token: string) => {
             },
         };
         const res = await axios.get(`${url}/sales/weekly`, config);
-        return res.data.content.total;
+        return res.data.total;
     } catch {
-        toast.error("Failed to get weekly sales", { style: { color: "#FFFFFF", background: "#FF0000" } });
+        return 0;
     }
 };
 
@@ -57,8 +57,8 @@ export const getMonthlySales = async (token: string) => {
             },
         };
         const res = await axios.get(`${url}/sales/monthly`, config);
-        return res.data.content.total;
+        return res.data.total;
     } catch {
-        toast.error("Failed to get monthly sales", { style: { color: "#FFFFFF", background: "#FF0000" } });
+        return 0;
     }
 };

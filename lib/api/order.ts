@@ -13,7 +13,6 @@ export const complete = async (token: string, orderId: string) => {
         };
         return await axios.post(`${url}/orders/complete/${orderId}`, {}, config);
     } catch (error) {
-        console.log(error);
         toast.error("Failed to complete order", { style: { color: "#FFFFFF", background: "#FF0000" } });
     }
 };
@@ -28,8 +27,8 @@ export const getDailyOrders = async (token: string) => {
             },
         };
         const res = await axios.get(`${url}/orders/today`, config);
-        return res.data.content.orders;
+        return res.data.orders;
     } catch {
-        toast.error("Failed to get daily orders", { style: { color: "#FFFFFF", background: "#FF0000" } });
+        return [];
     }
 };

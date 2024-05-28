@@ -3,6 +3,7 @@ export type userType = {
     email: string;
     id: string;
     token: string;
+    notification_token: string;
     img_url: string | null;
 };
 //? ticket

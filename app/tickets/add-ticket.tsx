@@ -13,7 +13,7 @@ import { AppContext } from "@/provider/app-provider";
 
 export default function AddTicket() {
     const { user } = useContext(AppContext);
-    const { tags, ticketTags, updateTicketDetails } = useTicket();
+    const { tags, ticketTags, updateTicketDetails, setTickets } = useTicket();
     const [tagsWithTicket, setTagsWithTicket] = useState<number[]>([]);
     const { register, handleSubmit, control } = useForm<TicketFormValues>({
         defaultValues: {
@@ -32,8 +32,8 @@ export default function AddTicket() {
     });
 
     const onSubmit = async (data: TicketFormValues) => {
-        console.log(data);
-        addTicket(user.token, data);
+        console.log(user, data);
+        await addTicket(user.token, data);
     };
 
     return (

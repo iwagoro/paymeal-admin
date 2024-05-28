@@ -20,15 +20,16 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
+            //?　ログイン
             if (user) {
                 try {
                     const token = await getIdToken(user);
-                    await getUserInfo(token).then((data) => {
-                        setUser({ email: data.email, id: data.id, token: token, img_url: null });
-                    });
+                    const userInfo = await getUserInfo(token);
+                    setUser({ ...userInfo, token });
                 } catch {
                     router.push("/auth");
                 }
+                //? ログアウト
             } else {
                 setUser({} as userType);
                 router.push("/auth");
