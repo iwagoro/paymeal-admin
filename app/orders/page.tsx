@@ -50,6 +50,7 @@ export default function Home() {
                                         <TableBody key={index}>
                                             <TableRow>
                                                 <TableCell className="text-left">{item.number}</TableCell>
+                                                <TableCell className="text-left">{item.id}</TableCell>
                                                 <TableCell className="text-center">
                                                     <Badge>{item.status}</Badge>
                                                 </TableCell>

@@ -12,7 +12,7 @@ const inter = Inter({
     weight: ["400", "700"], // 必要なウェイトを指定
 });
 
-const baseStyle = "w-screen h-screen flex justify-center items-center bg-muted/40 overflow-hidden";
+const baseStyle = "w-screen h-screen flex justify-center items-center bg-background overflow-hidden";
 const responsiveStyle = "max-w-screen-xl w-full h-full  py-[70px]  px-5 overflow-y-scroll hidden-scrollbar";
 
 export const metadata: Metadata = {

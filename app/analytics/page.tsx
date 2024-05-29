@@ -63,13 +63,20 @@ export default function Home() {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="date" />
                             <YAxis />
-                            <Tooltip />
+                            <Tooltip contentStyle={{ backgroundColor: "white", color: "black" }} />
                             <Legend />
-                            <Bar dataKey="total" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
+                            <Bar dataKey="total" fill="#16a34a" activeBar={<Rectangle fill="#16a34a" stroke="blue" />} />
                         </BarChart>
                     </ResponsiveContainer>
                 </CardContent>
             </Card>
+            <div className="grid grid-cols-2 gap-5">
+                <div className="flex flex-col gap-5">
+                    <Card className="w-full">
+                        <CardHeader></CardHeader>
+                    </Card>
+                </div>
+            </div>
         </div>
     );
 }
