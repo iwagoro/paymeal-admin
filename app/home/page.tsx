@@ -18,7 +18,7 @@ export default function Home() {
         <div className="w-full flex flex-col justify-start items-start gap-5 ">
             <Card className="w-full">
                 <CardHeader>
-                    <CardTitle>Welcome Back!</CardTitle>
+                    <CardTitle className="text-4xl">Welcome Back!</CardTitle>
                     <CardDescription className="text-xs">USER : {user.email}</CardDescription>
                     <CardDescription className="text-xs">ID : {user.id}</CardDescription>
                 </CardHeader>

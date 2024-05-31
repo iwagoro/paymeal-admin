@@ -16,7 +16,7 @@ export const AppContext = createContext(
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<userType>({} as userType);
-    const [isLogin, setIsLogin] = useState<boolean>(false);
+    const [authStatus, setAuthStatus] = useState<0 | 1 | 2>(0); // 0: loading, 1: login, 2: logout
     const router = useRouter();
 
     useEffect(() => {
@@ -27,20 +27,20 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
                     const token = await getIdToken(user);
                     const userInfo = await getUserInfo(token);
                     setUser({ ...userInfo, token });
-                    setIsLogin(true);
+                    setAuthStatus(1);
                 } catch {
-                    setIsLogin(false);
+                    setAuthStatus(0);
                     router.push("/auth");
                 }
                 //? ログアウト
             } else {
-                setIsLogin(false);
                 setUser({} as userType);
+                setAuthStatus(2);
                 router.push("/auth");
             }
         });
     }, []);
 
     const contextValue = { user, setUser };
-    return <AppContext.Provider value={contextValue}>{isLogin ? children : <div>loading...</div>}</AppContext.Provider>;
+    return <AppContext.Provider value={contextValue}>{authStatus == 0 ? <div>loading...</div> : children}</AppContext.Provider>;
 };

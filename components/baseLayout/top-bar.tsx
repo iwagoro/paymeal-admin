@@ -6,7 +6,7 @@ export const TopBar = () => {
             <div className="w-full h-full max-w-screen-xl flex justify-between items-center gap-10">
                 <Link href="/home">
                     <div className="flex items-center">
-                        <h2 className="scroll-m-20  text-[24px] font-semibold tracking-tight first:mt-0">Paymeal</h2>
+                        <h2 className="scroll-m-20  text-[24px] font-semibold tracking-tight first:mt-0">Paymeal-Admin</h2>
                     </div>
                 </Link>
 

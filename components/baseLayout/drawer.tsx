@@ -51,7 +51,7 @@ export const Drawer = () => {
                         className={`flex gap-5 items-center  bg-transparent curosr-pointer`}
                         onClick={() => {
                             logOut();
-                            router.push("/");
+                            router.push("/auth");
                         }}
                     >
                         <MdLogout size={24} />
