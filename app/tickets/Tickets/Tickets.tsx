@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/provider/AuthProvider";
 import useSWRImmutable from "swr/immutable";
 import { Skeleton } from "@/components/ui/skeleton";
+import AddTicket from "./AddTicket";
 
 type TicketTag = {
     ticket_id: number;
@@ -51,6 +52,7 @@ export default function Tickets() {
 
     return (
         <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-5">
+            <AddTicket />
             {Array.isArray(tickets) && tickets.map((ticket, index) => <TicketCard key={index} ticket={ticket} tags={tags}></TicketCard>)}
         </div>
     );

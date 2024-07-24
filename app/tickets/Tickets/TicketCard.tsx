@@ -1,9 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { TagType, TicketType } from "@/lib/types";
-import React, { useContext } from "react";
 import modifier from "@/lib/modifier";
 import { AuthContext } from "@/provider/AuthProvider";
 import { Label } from "@radix-ui/react-context-menu";
@@ -12,8 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { Badge } from "@/components/ui/badge";
-import { Plus } from "lucide-react";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 type TicketTag = {
     ticket_id: number;
@@ -25,21 +23,35 @@ type TicketCardProps = TicketType & {
     tags?: TicketTag[];
 };
 
+type FormValues = {
+    img_url: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+};
+
 export default function TicketCard({ ticket, tags }: { ticket: TicketCardProps; tags: TagType[] }) {
     const { user } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
 
-    const [name, setName] = useState(ticket.name);
-    const [description, setDescription] = useState(ticket.description);
-    const [price, setPrice] = useState(ticket.price);
-    const [stock, setStock] = useState(ticket.stocks?.stock ?? 0);
+    const { register, handleSubmit, setValue } = useForm<FormValues>({
+        defaultValues: {
+            img_url: ticket.img_url,
+            name: ticket.name,
+            description: ticket.description,
+            price: ticket.price,
+            stock: ticket.stocks?.stock ?? 0,
+        },
+    });
 
-    const submitChange = async () => {
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
         user?.token &&
             modifier
-                .put(`/tickets-info`, user.token, { ticket_id: ticket.id, name, description, price, stock })
+                .put(`/tickets-info`, user.token, { ticket_id: ticket.id, ...data })
                 .then(() => {
                     mutate(["/tickets-info", user.token]);
+                    setIsEditing(false);
                     toast.success("Ticket updated");
                 })
                 .catch(() => {
@@ -54,24 +66,20 @@ export default function TicketCard({ ticket, tags }: { ticket: TicketCardProps; 
                 <Label className="mt-1">Edit</Label>
                 <Switch checked={isEditing} onCheckedChange={setIsEditing} />
             </CardHeader>
-            <CardContent className="flex flex-col gap-5">
-                <Input value={name} disabled={!isEditing} onChange={(e) => setName(e.target.value)} />
-                <Textarea value={description} disabled={!isEditing} onChange={(e) => setDescription(e.target.value)} />
-                <Input value={price} disabled={!isEditing} type="number" onChange={(e) => setPrice(Number(e.target.value))} />
-                <Input value={stock} disabled={!isEditing} type="number" onChange={(e) => setStock(Number(e.target.value))} />
-            </CardContent>
-            {/* <CardFooter className="w-full flex-wrap gap-2">
-                {Array.isArray(ticket.tags) && ticket.tags?.map((tag: TicketTag, index) => <Badge key={index}>{tags[tag.tag_id].name}</Badge>)}
-
-                <div className="cursor-pointer border p-1 rounded-full" onClick={() => {}}>
-                    <Plus size="14" />
-                </div>
-            </CardFooter> */}
-            <CardFooter>
-                <Button variant="outline" disabled={!isEditing} className="w-full" onClick={submitChange}>
-                    Submit
-                </Button>
-            </CardFooter>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <CardContent className="flex flex-col gap-5">
+                    <Input {...register("img_url")} disabled={!isEditing} className="input" />
+                    <Input {...register("name")} disabled={!isEditing} className="input" />
+                    <Textarea {...register("description")} disabled={!isEditing} className="input" />
+                    <Input {...register("price")} disabled={!isEditing} type="number" className="input" />
+                    <Input {...register("stock")} disabled={!isEditing} type="number" className="input" />
+                </CardContent>
+                <CardFooter>
+                    <Button type="submit" variant="outline" disabled={!isEditing} className="w-full">
+                        Submit
+                    </Button>
+                </CardFooter>
+            </form>
         </Card>
     );
 }
