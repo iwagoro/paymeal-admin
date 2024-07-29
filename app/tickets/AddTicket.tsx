@@ -12,10 +12,12 @@ import { mutate } from "swr";
 export default function AddTicket() {
     const { register, handleSubmit } = useForm();
     const { user } = useContext(AuthContext);
+
+    //! チケットの追加処理
     const onSubmit: SubmitHandler<any> = (data) => {
         user?.token &&
             modifier
-                .post(`/tickets-info`, user.token, { data })
+                .post(`/tickets-info`, user.token, { ...data })
                 .then(() => {
                     mutate(["/tickets-info", user.token]);
                     toast.success("Ticket added");

@@ -1,15 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import modifier from "@/lib/modifier";
+import { OrderType } from "@/lib/types";
 import { AuthContext } from "@/provider/AuthProvider";
 import { useContext } from "react";
 import { mutate } from "swr";
 
-export default function OrderCard({ order }: { order: any }) {
+export default function OrderCard({ order }: { order: OrderType }) {
     const { user } = useContext(AuthContext);
     const completeOrder = () => {
-        user?.token && order?.id && modifier.put("/orders/", user.token, { order_id: order.id }).then(() => mutate(["/orders/all/today", user.token]));
+        if (user) {
+            modifier.put("/orders/", user.token, { order_id: order.id }).then(() => mutate(["/orders/all/today", user.token]));
+        }
     };
     return (
         <Card className="flex flex-col h-full">

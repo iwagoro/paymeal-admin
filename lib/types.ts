@@ -2,7 +2,6 @@ export type UserType = {
     id: string;
     email: string;
     token: string;
-    notification_token: string | null;
 };
 
 export type TicketType = {
@@ -13,7 +12,7 @@ export type TicketType = {
     price: number;
     stock: number;
     sales: number;
-    tags: string[];
+    tags: { id: number; name: string }[];
     contents: string[];
 };
 
@@ -53,4 +52,10 @@ export type OrderDetailType = {
     ticket_name: string;
     ticket_price: number;
     quantity: number;
+};
+
+export type NotificationType = {
+    id: number;
+    title: string;
+    body: string;
 };

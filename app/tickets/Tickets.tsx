@@ -20,23 +20,12 @@ type TicketCardProps = TicketType & {
 
 export default function Tickets() {
     const { user } = useContext(AuthContext);
+    //! チケットの一覧を取得
     const {
         data: tickets,
         error: ticketsError,
         isLoading: ticketsLoading,
     } = useSWRImmutable<TicketCardProps[]>(user?.token ? ["/tickets-info", user.token] : null, ([url, token]) => fetcher(url, token as string));
-
-    const { data: tagDict, error, isLoading } = useSWRImmutable<TagType[]>(user?.token ? ["/tags", user.token] : null, ([url, token]) => fetcher(url, token as string));
-    const [tags, setTags] = useState<TagType[]>([]);
-
-    useEffect(() => {
-        if (!Array.isArray(tagDict)) return;
-        const newArray = Array(tagDict[0].id);
-        tagDict.map((tag) => {
-            newArray[tag.id] = tag;
-        });
-        setTags(newArray);
-    }, [tagDict]);
 
     if (ticketsLoading || ticketsError) {
         return (
@@ -53,7 +42,7 @@ export default function Tickets() {
     return (
         <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-5">
             <AddTicket />
-            {Array.isArray(tickets) && tickets.map((ticket, index) => <TicketCard key={index} ticket={ticket} tags={tags}></TicketCard>)}
+            {Array.isArray(tickets) && tickets.map((ticket, index) => <TicketCard key={index} ticket={ticket}></TicketCard>)}
         </div>
     );
 }

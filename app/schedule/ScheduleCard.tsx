@@ -7,6 +7,7 @@ import modifier from "@/lib/modifier";
 import { AuthContext } from "@/provider/AuthProvider";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { mutate } from "swr";
+import { toast } from "sonner";
 
 interface MenuProps {
     menu: {
@@ -18,12 +19,16 @@ interface MenuProps {
 }
 
 export default function ScheduleCard({ menu, date }: MenuProps) {
+    //! 編集モード
     const [isEditing, setIsEditing] = useState(false);
+    //! メニューの内容
     const [contents, setContents] = useState(menu.contents.join("\n"));
-    const { user } = useContext(AuthContext);
+    //! 今月
     const month = new Date(date).getMonth();
     const cardRef = useRef<HTMLDivElement>(null);
+    const { user } = useContext(AuthContext);
 
+    //! メニューの削除処理
     const deleteMenu = useCallback(async () => {
         if (user && date) {
             await modifier.delete(`/tickets/daily`, user.token, { ticket_id: menu.id, date });
@@ -31,13 +36,23 @@ export default function ScheduleCard({ menu, date }: MenuProps) {
         }
     }, [user, date, menu.id, month]);
 
+    //! メニューの更新処理
     const submitChange = useCallback(async () => {
         if (user && date) {
-            await modifier.put(`/tickets/daily`, user.token, { ticket_id: menu.id, contents, date });
-            mutate(["/tickets/daily/month", user.token]);
+            modifier
+                .put(`/tickets/daily`, user.token, { ticket_id: menu.id, contents, date })
+                .then(() => {
+                    mutate(["/tickets/daily/month", user.token]);
+                    setIsEditing(false);
+                    toast.success("Menu updated");
+                })
+                .catch((e) => {
+                    toast.error("Failed to update menu");
+                });
         }
     }, [user, date, contents, menu.id, month]);
 
+    //! マウント時にクリックイベントを追加//! マウント時にクリックイベントを追加
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (cardRef.current && !cardRef.current.contains(event.target as Node)) {

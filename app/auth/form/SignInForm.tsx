@@ -9,32 +9,37 @@ import { Button } from "@/components/ui/button";
 import { FormInput } from "./FormInput";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { TriangleAlert } from "lucide-react";
-import { FormType, signIn } from "../handlers";
+import { signIn } from "../handlers";
 
-export default function LoginForm() {
+type FormType = { email: string; password: string };
+
+export default function SignInForm() {
+    //! アラートメッセージ
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const router = useRouter();
+    //! フォームの状態を管理
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<FormType>();
+    //! ページ遷移
+    const router = useRouter();
 
+    //! ログイン処理
     const onSubmit = async (data: FormType) => {
-        try {
-            const result = await signIn(data.email, data.password);
-            if (result) {
-                mutate("/user");
-                router.push("/home");
-                toast.success("Login successful");
-            }
-        } catch (error: any) {
-            setErrorMessage(error.message);
-        }
+        signIn(data.email, data.password)
+            .then(() => {
+                router.push("/orders");
+                toast.success("sign in successful");
+            })
+            .catch((error) => {
+                setErrorMessage(error.message);
+            });
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-10">
+            {/* //! エラーメッセージ */}
             {errorMessage && (
                 <Alert variant="destructive">
                     <TriangleAlert size={16} />
@@ -45,7 +50,7 @@ export default function LoginForm() {
             <FormInput id="email" label="Email" type="email" register={register} errors={errors} validation={{ required: "Email is required" }} />
             <FormInput id="password" label="Password" type="password" register={register} errors={errors} validation={{ required: "Password is required" }} />
             <Button className="w-full" type="submit">
-                Login
+                Sign in
             </Button>
         </form>
     );

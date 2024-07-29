@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
-import { H1, P } from "@/components/ui/typography";
+import { H1, H3, P } from "@/components/ui/typography";
 import fetcher from "@/lib/fetcher";
 import { AuthContext } from "@/provider/AuthProvider";
 import { useContext, useState, useEffect } from "react";
@@ -13,18 +13,21 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function Schedules() {
     const monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const [month, setMonth] = useState(new Date().getMonth());
+    const [month, setMonth] = useState(new Date().getMonth() + 1);
+
     const [monthName, setMonthName] = useState("");
+    const [year, setYear] = useState(new Date().getFullYear());
     const { user } = useContext(AuthContext);
 
-    const { data: menu, error, isLoading } = useSWR<any>(user?.token ? ["/tickets/daily/month", user.token] : null, ([url, token]) => fetcher(url, token as string, { month: month }));
+    //! 今月のメニューを取得
+    const { data: menu, error, isLoading } = useSWR<any>(user?.token ? ["/tickets/daily/month", user.token] : null, ([url, token]) => fetcher(url, token as string, { month: month, year: year }));
 
     useEffect(() => {
-        if (!user) return;
-        setMonthName(monthNames[month]);
-
-        mutate(["/tickets/daily/month", user.token]);
-    }, [month]);
+        if (user) {
+            setMonthName(monthNames[month]);
+            mutate(["/tickets/daily/month", user.token]);
+        }
+    }, [month, user]);
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -33,16 +36,29 @@ export default function Schedules() {
                     <Button
                         variant="outline"
                         onClick={() => {
-                            setMonth(month - 1);
+                            if (month === 1) {
+                                setMonth(12);
+                                setYear(year - 1);
+                            } else {
+                                setMonth(month - 1);
+                            }
                         }}
                     >
                         <ArrowLeft size={18} />
                     </Button>
-                    <H1 className="w-full text-center">{monthName}</H1>
+                    <div className="w-full flex flex-col items-center">
+                        <H1 className="w-full text-center">{monthName}</H1>
+                        <H3 className="w-full text-center">{year}</H3>
+                    </div>
                     <Button
                         variant="outline"
                         onClick={() => {
-                            setMonth(month + 1);
+                            if (month === 12) {
+                                setMonth(1);
+                                setYear(year + 1);
+                            } else {
+                                setMonth(month + 1);
+                            }
                         }}
                     >
                         <ArrowRight size={18} />

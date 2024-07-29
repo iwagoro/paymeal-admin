@@ -1,4 +1,4 @@
-import Tickets from "./Tickets/Tickets";
+import Tickets from "./Tickets";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 

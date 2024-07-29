@@ -19,8 +19,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const router = useRouter();
     const pathname = usePathname();
 
-    const { data, isLoading, error } = useSWR(user?.token ? ["user/", user.token] : null, ([url, token]) => fetcher(url, token));
-
     useEffect(() => {
         if (pathname === "/auth") return; // /authページでは認証チェックをスキップ
 

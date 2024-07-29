@@ -6,30 +6,30 @@ import { Button } from "@/components/ui/button";
 import { FormInput } from "./FormInput";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { TriangleAlert } from "lucide-react";
-import { FormType, signUp } from "../handlers";
+import { signUp } from "../handlers";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
-import { toast } from "sonner";
+
+type FormType = { email: string; password: string };
 
 export default function SignUpForm({ variation }: { variation?: "outline" | "default" }) {
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const router = useRouter();
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<FormType>();
+    const router = useRouter();
 
     const onSubmit = async (data: FormType) => {
-        console.log(data);
-        try {
-            signUp(data.email, data.password).then(() => {
+        signUp(data.email, data.password)
+            .then(() => {
                 mutate("/user");
-                router.push("/home");
+                router.push("/orders");
+            })
+            .catch((error) => {
+                setErrorMessage(error.message);
             });
-        } catch (error) {
-            setErrorMessage("Sign up failed");
-        }
     };
 
     return (

@@ -10,18 +10,27 @@ import { Plus } from "lucide-react";
 import { useContext } from "react";
 import useSWR, { mutate } from "swr";
 import modifier from "@/lib/modifier";
+import { toast } from "sonner";
 
 export default function SelectTickets({ date }: { date: string }) {
     const { user } = useContext(AuthContext);
-    const { data: tickets, error, isLoading } = useSWR<TicketType[]>(user?.token ? ["/tickets", user.token] : null, ([url, token]) => fetcher(url, token as string));
+    //! チケットの一覧を取得
+    const { data: tickets } = useSWR<TicketType[]>(user?.token ? ["/tickets", user.token] : null, ([url, token]) => fetcher(url, token as string));
+
+    //! メニューの追加処理
     const addMenu = async (ticket_id: number) => {
-        user &&
-            ticket_id &&
-            date &&
-            modifier.post(`/tickets/daily`, user.token, { ticket_id: ticket_id, date: date }).then(() => {
-                mutate(["/tickets/daily/month", user.token]);
-            });
+        if (user && ticket_id && date) {
+            modifier
+                .post(`/tickets/daily`, user.token, { ticket_id: ticket_id, date: date })
+                .then(() => {
+                    mutate(["/tickets/daily/month", user.token]);
+                })
+                .catch(() => {
+                    toast.error("Failed to add schedule");
+                });
+        }
     };
+
     return (
         <Popover>
             <PopoverTrigger asChild>

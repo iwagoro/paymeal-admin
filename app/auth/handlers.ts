@@ -1,6 +1,6 @@
 import { auth } from "@/lib/firebase";
 import modifier from "@/lib/modifier";
-import { createUserWithEmailAndPassword, getIdToken, signInWithEmailAndPassword, signOut as LogOut, deleteUser } from "firebase/auth";
+import { createUserWithEmailAndPassword, getIdToken, signInWithEmailAndPassword, signOut as LogOut } from "firebase/auth";
 
 //! サインアップ時のエラーハンドリング
 export const handleSignUpError = (error: any) => {
@@ -34,6 +34,7 @@ export const handleLoginError = (error: any) => {
     }
 };
 
+//! サインイン処理
 export const signIn = async (email: string, password: string) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -48,6 +49,7 @@ export const signIn = async (email: string, password: string) => {
     }
 };
 
+//! サインアップ処理
 export const signUp = async (email: string, password: string) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -68,6 +70,7 @@ export const signUp = async (email: string, password: string) => {
     }
 };
 
+//! サインアウト処理
 export const signOut = async () => {
     try {
         await LogOut(auth);
@@ -75,5 +78,3 @@ export const signOut = async () => {
         throw new Error("An error occurred while signing out: " + String(error));
     }
 };
-
-export type FormType = { email: string; password: string };

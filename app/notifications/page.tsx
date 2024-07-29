@@ -1,12 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
-import Schedules from "./Schedules";
+import Notifications from "./Notifications";
+import AddNotification from "./AddNotification";
 
-export default function Home() {
+export default function Page() {
     return (
         <div className="w-full flex flex-col justify-start items-start gap-5 ">
+            <AddNotification />
             <Suspense fallback={<Skeleton className="h-80 w-full " />}>
-                <Schedules />
+                <Notifications />
             </Suspense>
         </div>
     );
