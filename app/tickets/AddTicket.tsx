@@ -9,12 +9,20 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "swr";
 
+type FormValues = {
+    img_url: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+};
+
 export default function AddTicket() {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm<FormValues>();
     const { user } = useContext(AuthContext);
 
     //! チケットの追加処理
-    const onSubmit: SubmitHandler<any> = (data) => {
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
         user?.token &&
             modifier
                 .post(`/tickets-info`, user.token, { ...data })

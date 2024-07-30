@@ -110,7 +110,7 @@ export default function TicketCard({ ticket }: { ticket: TicketCardProps }) {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [cardRef]);
+    }, [cardRef, isOpen]);
 
     return (
         <>
