@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             try {
                 if (user) {
                     const token = await getIdToken(user);
-                    setUser({ token: token || "", email: user.email || "", id: user.uid || "", notification_token: "" });
+                    setUser({ token: token || "", email: user.email || "", id: user.uid || "" });
                 } else {
                     setUser(null);
                     router.push("/auth");
